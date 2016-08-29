@@ -1,7 +1,7 @@
 var Conference;
 (function (Conference) {
     // connect to xsocket
-    var socket = new XSockets.WebSocket("ws://210.245.83.31:4503", ["conference"]);
+    var socket = new XSockets.WebSocket("wss://210.245.83.31:4503", ["conference"]);
     // allow auto reconnect
     socket.autoReconnect();
     // conference controller
