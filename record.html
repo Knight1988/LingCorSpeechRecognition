@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="https://www.google.com/intl/en/chrome/assets/common/css/chrome.min.css" rel="stylesheet" />
+    <style>
+        #start_button {
+            border: 0;
+            background-color: transparent;
+            padding: 0;
+        }
+    </style>
+    <script src="http://lingcor.net/Themes/BestLearn/js/XSockets.latest.min.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/conference.js"></script>
+    <script src="scripts/querystring.js"></script>
+    <script src="scripts/recognition.js"></script>
+</head>
+<body>
+    <div class="compact marquee">
+        <div id="div_start">
+            <button id="start_button" style="display: inline-block;"><img alt="Start" id="start_img" src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif"></button>
+        </div>
+    </div>
+    <script>
+        var recognition = new Recognition();
+        recognition.onStart = function () {
+            console.log("Start recognition.");
+        }; 
+
+        recognition.onError = function (event) {
+            if (event.error === "no-speech") {
+                console.log("No speech was detected. You may need to adjust your microphone settings. https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892");
+            }
+            if (event.error === "audio-capture") {
+                console.log("No microphone was found. Ensure that a microphone is installed and that microphone settings are configured correctly. https://support.google.com/chrome/bin/answer.py?hl=en&amp;answer=1407892");
+            }
+            if (event.error === "not-allowed") {
+                if (event.timeStamp - start_timestamp < 100) {
+                    console.log("Permission to use microphone is blocked. To change, go to chrome://settings/contentExceptions#media-stream");
+                } else {
+                    console.log("Permission to use microphone was denied.");
+                }
+            }
+        };
+
+        recognition.onEnd = function () {
+            console.log("Finish recognition.");
+        };
+
+        recognition.onResult = function (event) {
+            if (typeof (event.results) == 'undefined') {
+                console.log("Web Speech API is not supported by this browser. Upgrade to Chrome version 25 or later.");
+                return;
+            }
+
+            console.log(recognition.finalTranscript || recognition.interimTranscript);
+        };
+    </script>
+</body>
+</html>
